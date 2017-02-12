@@ -10,22 +10,18 @@ const db = require('../../../pouchDB')
 class Register extends React.Component {
 
   handleSubmit () {
-    const { dispatch } = this.props
-
-    const userName = this.refs.userName.value
-    const email = this.refs.email.value
-    const password = this.refs.password.value
+    const { dispatch, router } = this.props
 
     var newUser = {
-      email,
-      userName,
+      email: this.refes.email.value,
+      userName, ///....
       password
     }
     db.register(newUser, (err, status) => {
       if (err) throw error
       if (status.register) {
         dispatch({type: 'LOG_IN', payload: status.user})
-        this.props.router.push(`/users/${status.user._id}`)
+        router.push(`/users/${status.user._id}`)
       } else {
         dispatch({type: 'AUTH_ERR', payload: status.error})
       }

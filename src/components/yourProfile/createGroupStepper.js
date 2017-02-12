@@ -11,7 +11,7 @@ const { connect } = require('react-redux')
 const Group = require('./createGroup')
 const KeyLocations = require('./groupKeyLocations')
 
-class HalfStepper extends React.Component {
+class Stepper extends React.Component {
 
   handleNext () {
     const {dispatch} = this.props
@@ -25,31 +25,6 @@ class HalfStepper extends React.Component {
     }
   }
 
-  renderStepActions (step) {
-    const {groupStepIndex} = this.props
-
-    return (
-      <div style={{margin: '12px 0'}}>
-        <RaisedButton
-          label={groupStepIndex === 2 ? 'Finish' : 'Next'}
-          disableTouchRipple
-          disableFocusRipple
-          primary
-          onClick={this.handleNext.bind(this)}
-          style={{marginRight: 12}}
-        />
-        {step > 0 && (
-          <FlatButton
-            label='Back'
-            disabled={groupStepIndex === 0}
-            disableTouchRipple
-            disableFocusRipple
-            onClick={this.handlePrev.bind(this)}
-         />
-       )}
-      </div>
-    )
-  }
   render () {
     const finished = false
     const {groupStepIndex} = this.props
@@ -75,7 +50,7 @@ class HalfStepper extends React.Component {
               <p>
                 Lucas will guide you through making your cache
              </p>
-              {this.renderStepActions(2)}
+              <StepActions label={} isDisabled={} handeClick={} step={2} />
             </StepContent>
           </Step>
         </Stepper>
@@ -84,5 +59,35 @@ class HalfStepper extends React.Component {
     )
   }
 }
+
+
+
+function StepActions (step) {
+    const {groupStepIndex} = this.props
+    const label = groupStepIndex === 2 ? 'Finish' : 'Next'
+    const isDisabled = groupStepIndex === 0
+
+    return (
+      <div style={{margin: '12px 0'}}>
+        <RaisedButton
+          label={label}
+          disableTouchRipple
+          disableFocusRipple
+          primary
+          onClick={this.handleNext.bind(this)}
+          style={{marginRight: 12}}
+        />
+        {step > 0 && (
+          <FlatButton
+            label='Back'
+            disabled={isDisabled}
+            disableTouchRipple
+            disableFocusRipple
+            onClick={this.handlePrev.bind(this)}
+         />
+       )}
+      </div>
+    )
+  }
 
 module.exports = connect((state) => state)(HalfStepper)

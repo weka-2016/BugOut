@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test/**/*.tape.js | tap-diff",
-    "test-ava": "ava test/**/*.ava.js --serial --verbose",
     "knex": "knex",
     "postinstall": "webpack --config webpack.production.config.js --progress -p",
     "start": "node ./bin/www",
@@ -24,7 +23,6 @@
   },
   "homepage": "https://github.com/Bugaloos/BugOut#readme",
   "dependencies": {
-    "ava": "^0.17.0",
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
@@ -38,7 +36,6 @@
     "cloudant": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "debug": "^2.6.0",
-    "deep-freeze": "0.0.1",
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
     "express-session": "^1.15.0",
@@ -60,7 +57,6 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "serve-favicon": "^2.3.2",
-    "sqlite3": "^3.1.8",
     "superagent": "^3.4.1",
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.9.0",
@@ -68,6 +64,9 @@
     "file-loader": "^0.10.0"
   },
   "devDependencies": {
+    "sqlite3": "^3.1.8",
+    "ava": "^0.17.0",
+    "deep-freeze": "0.0.1",
     "eslint": "^3.14.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-jsx-a11y": "^3.0.2",
@@ -75,6 +74,7 @@
     "eslint-plugin-react": "^6.9.0",
     "eslint-plugin-standard": "^2.0.1",
     "file-loader": "^0.10.0",
+    "istanbul": "",
     "nodemon": "^1.11.0",
     "standard": "^8.6.0",
     "style-loader": "^0.13.1",

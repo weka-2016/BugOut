@@ -21,5 +21,5 @@ const App = (props) => {
   )
 }
 
-module.exports = connect((state) => state)(App)
+module.exports = App
 // <img src={antCircle} />

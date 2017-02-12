@@ -15,7 +15,6 @@ module.exports = function () {
   const app = express()
 
   app.use(favicon(path.join(__dirname, 'public', 'image', 'favicon.ico')))
-  app.use(logger('dev'))
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(cookieParser())
@@ -23,13 +22,14 @@ module.exports = function () {
   // session config
   app.set('trust proxy', 1) // trust first proxy
   app.use(session({
-    secret: 'keyboard cat',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { secure: false } // TODO - set up https, change secure true
   }))
 
   if (app.get('env') === 'development') {
+    app.use(logger('dev')) // production only?
     // bundle client/index.js
     // and serve it at GET /bundle.js
     const webpackDevMiddleware = require('webpack-dev-middleware')

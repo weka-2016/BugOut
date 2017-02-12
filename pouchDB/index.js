@@ -1,8 +1,11 @@
 const PouchDB = require('pouchdb')
 const request = require('superagent')
-var usersDB = new PouchDB('users')
-var groupsDB = new PouchDB('groups')
+const usersDB = new PouchDB('users')
+const groupsDB = new PouchDB('groups')
 
+const config = require('../config')
+
+// NOPE
 var username = process.env.cloudant_username || "nodejs"
 var passwordC = process.env.cloudant_password
 
@@ -11,15 +14,14 @@ module.exports = {
   login: function (enteredUser, cb) {
     usersDB.get(enteredUser.userName, {include_docs: true}, (err, user) => {
       if (err) {
+        // SYNC yo async
         request.post('api/v1/login/authserver')
           .send(enteredUser)
-          .then(res => {
-            cb(null, res.body)
-          })
+          .then(res => cb(null, res.body) )
           .catch(err)
       } else {
         request.post('api/v1/login/authlocal')
-          .send({enteredUser, user})
+          .send({ enteredUser, user })
           .then(res => {
             cb(null, res.body)
           })
@@ -33,7 +35,6 @@ module.exports = {
       .send(newUser)
       .then(res => {
         if (res.body.register) {
-          console.log('look here', res.body)
           const user = { _id: userName, email, hash: res.body.user.hash }
           usersDB.put(user, (err, result) => {
             if (!err) {
@@ -57,7 +58,7 @@ module.exports = {
           cb(null, res.body)
         } else {
           var newGroupDB = new PouchDB(groupName)
-          const newGroupRemoteCouch = new PouchDB(`https://bill-burgess.cloudant.com/${groupName}`, {
+          const newGroupRemoteCouch = new PouchDB(`${config.domain}/${groupName}`, {
             auth: {
               username: username,
               password: passwordC

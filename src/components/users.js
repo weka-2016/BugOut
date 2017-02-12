@@ -19,4 +19,5 @@ function Users (props) {
   )
 }
 
+// this connect makes this more like a container
 module.exports = connect((state) => state)(Users)

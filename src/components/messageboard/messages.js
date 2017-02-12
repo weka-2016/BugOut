@@ -1,18 +1,22 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const { Link } = require('react-router')
-const db = require('../../../pouchDB')
 import {List, ListItem} from 'material-ui/List'
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors'
 
+const db = require('../../../pouchDB')
+
 function updateMessages(group, dispatch){
-  db.getMessages(group, (err, response) => {
+  db.getMessages(group, (err, responses) => {
     if(err) throw err
-    const messages = response.map(respond => {
-      const {text, userName} = respond.doc
-      return {text, userName}
-    })
-    dispatch({type: 'UPDATE_MESSAGES', payload: messages})
+    dispatch({type: 'UPDATE_MESSAGES', payload: getMessages(responses)})
+  })
+}
+
+function getMessages (responses) {
+  return responses.map(response => {
+    const {text, userName} = response.doc
+    return {text, userName}
   })
 }
 
@@ -22,20 +26,14 @@ class Messages extends React.Component {
     const { dispatch, group } = this.props
     updateMessages(group, dispatch)
 
-    db.getMessages(group, (err, response) => {
+    db.getMessages(group, (err, responses) => {
       if (err) throw (err)
-      const messages = response.map(respond => {
-        const {text, userName} = respond.doc
-        return {text, userName}
-      })
-      dispatch({type: 'UPDATE_MESSAGES', payload: messages})
+      dispatch({type: 'UPDATE_MESSAGES', payload: getMessages(responses)})
     })
   }
 
-
   render () {
-    const { dispatch, group } = this.props
-    const { messages } = this.props
+    const { dispatch, group, messages } = this.props
 
     setInterval(function (){
       db.syncGroup(group, (err, status) => {
@@ -44,29 +42,26 @@ class Messages extends React.Component {
       })
     }, 5000)
 
-    function renderMessage({userName, text}) {
-      return (
-        <ListItem
-          primaryText={
-            <p>
-              <span style={{color: darkBlack}} key={userName} >{userName}</span> -- {text}
-            </p>
-        }
-        />
-      )
-    }
-
-    function renderMessages (messages) {
-      const renderedMessages = messages.map(renderMessage)
-      return renderedMessages
-    }
 
     return (
       <div>
-        {renderMessages(messages)}
+        {messages.map(renderMessage)}
       </div>
     )
   }
 }
+
+function renderMessage({userName, text})
+  return (
+    <ListItem
+      primaryText={
+        <p>
+          <span style={{color: darkBlack}} key={userName} >{userName}</span> -- {text}
+        </p>
+    }
+    />
+  )
+}
+
 
 module.exports = connect((state) => state)(Messages)

@@ -19,12 +19,25 @@ module.exports = combineReducers({
   groupStepIndex,
   loggedIn,
   messages,
-  planComplete,
-  planStepIndex,
+
+  // either 
+  plan
+    Complete,
+    StepIndex,
+    ShowCreate  // could nest show under each resource type?
+
   setLocations,
   showLoginForm,
   showRegisterForm,
   showCreateGroup,
   showJoinGroup,
   showCreatePlan
+
+  // or collect all the shows into one area... 
+  show
+    LoginForm,
+    RegisterForm,
+    CreateGroup,
+    JoinGroup,
+    CreatePlan
 })

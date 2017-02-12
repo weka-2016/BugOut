@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs') // for auth and password hash
 const express = require('express')
 const route = express.Router()
-require('dotenv').load()
+require('dotenv').load() // development only
 
 // Load the Cloudant library.
 var Cloudant = require('cloudant')
@@ -10,11 +10,12 @@ var Cloudant = require('cloudant')
 var username = process.env.cloudant_username || 'nodejs'
 var passwordC = process.env.cloudant_password
 
-module.exports = function () {
+module.exports = function (db) {  // if you add db ad an argument means you can 'mock' out Cloudant
   route.post('/login/authlocal', authlocal)
   route.post('/login/authserver', authserver)
-  route.post('/register', isUserUnique, encrypt)
-  route.post('/createGroup', isGroupUnique, createGroupDB, addToGroups)
+  route.post('/user', isUserUnique, encrypt)
+  route.post('/group', isGroupUnique, createGroupDB, addToGroups)
+  // could test this middleware ?
 
   function authlocal (req, res, next) {
     const { enteredUser, user } = req.body
